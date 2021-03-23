@@ -70,3 +70,34 @@ docker run
 
 docker exec -it employees-jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 ```
+
+```
+docker exec --user root -it employees-jenkins chmod 777 /var/run/docker.sock
+
+git update-index --chmod=+x gradlew
+```
+
+```
+docker run -d   
+    -e MYSQL_DATABASE=employees    
+    -e MYSQL_USER=employees    
+    -e MYSQL_PASSWORD=employees    
+    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes     
+    --name employees-it-mariadb
+    --network jenkins
+    -p 3307:3306
+    mariadb
+```
+
+SonarQube
+
+```
+docker run --name employees-sonarqube --detach 
+  --network jenkins 
+  --publish 9000:9000 
+  sonarqube:lts
+```
+
+```
+gradlew sonarqube
+```
